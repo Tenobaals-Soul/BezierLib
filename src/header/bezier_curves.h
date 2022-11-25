@@ -23,7 +23,7 @@ typedef struct bc_curve_t {
     // Array of the vertices with the size
     // `_dimension * _vertice_count * (_grade + 1)`
     // with `_vertice_count` subarrays of size each describing a point.
-    double _vertices;
+    double* _vertices;
 } bc_curve_t[1];
 
 /**
