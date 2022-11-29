@@ -2,7 +2,7 @@
 #include <GL/gl.h>
 #include <bezier_curves.h>
 
-#define TMAX 128
+#define TMAX 32
 
 bc_curve_t curve;
 
@@ -28,7 +28,7 @@ void display() {
         glVertex2d(x, y);
     }
     glEnd();
-    for (unsigned long i = 0; i < 4; i++) {
+    for (unsigned long i = 0; i < 7; i++) {
         double x, y;
         bc_get_point2(curve, i, &x, &y);
         draw_cross(x, y);
@@ -44,10 +44,10 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(display);
 
-    bc_init_bezier_curve2(curve, 3, 2);
-    double x[4] = {-0.8, -0.6, 0.6, 0.8};
-    double y[4] = {-0.8, 0.8, -0.6, 0.6};
-    for (int i = 0; i < 4; i++) {
+    bc_init_bezier_curve2(curve, 3, 3);
+    double x[7] = {-0.8, -0.6, -0.4, 0.1, 0.6, 0.5, 0.7};
+    double y[7] = {-0.8, 0.8, -0.6, 0.2, 0.8, 0.7, -0.7};
+    for (int i = 0; i < 7; i++) {
         bc_set_point2(curve, i, x[i], y[i]);
     }
     glutMainLoop();

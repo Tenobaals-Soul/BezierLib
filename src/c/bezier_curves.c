@@ -12,16 +12,6 @@ static size_t vert_byte_size(bc_curve_t curve) {
         (curve->_vertice_count - 1) * (curve->_grade + 1);
 }
 
-void init_binomial_coefficients(unsigned long* out, unsigned long level) {
-    out[0] = 1;
-    for (unsigned int i = 1; i <= level; i++)
-        out[i] = 0;
-    for (unsigned int i = 1; i <= level; i++) {
-        for (int j = i; j > 0; j--)
-            out[j] = out[j] + out[j - 1];
-    }
-}
-
 void bc_init_bezier_curve(bc_curve_t curve,
                           unsigned int dimension,
                           unsigned int grade,
@@ -30,13 +20,11 @@ void bc_init_bezier_curve(bc_curve_t curve,
     curve->_grade = grade;
     curve->_vertice_count = vertices;
     size_t required = sizeof(double) * dimension * vertices * (grade + 1);
+    if (required > grade)
+        required -= grade;
     curve->_vertices = malloc(
         ((LIST_ALLOCATION_SIZE + required - 1) / required) * required
     );
-    curve->_bin_cof_buffer = malloc(
-        sizeof(unsigned long) * curve->_grade
-    );
-    init_binomial_coefficients(curve->_bin_cof_buffer, curve->_grade);
 }
 
 void bc_init_bezier_curve2(bc_curve_t curve,
@@ -179,7 +167,9 @@ static double interpolate_internal(bc_curve_t curve,
     unsigned long off = t * (curve->_vertice_count - 1);
     if (off == curve->_vertice_count - 1) // t == 1 would result in an overrun
         off--;
-    off *= curve->_dimension * vertices_in_curve;
+    t -= (double) off / (curve->_vertice_count - 1);
+    t *= (curve->_vertice_count - 1);
+    off *= curve->_dimension * curve->_grade;
     off += dimension;
     double out_buffer[vertices_in_curve];
     for (unsigned long i = 0; i < vertices_in_curve; i++) {
