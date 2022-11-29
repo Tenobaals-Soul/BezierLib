@@ -20,8 +20,13 @@ typedef struct bc_curve_t {
     unsigned int _dimension;
     // This is also the lenght of the `_vertices` array.
     unsigned long _vertice_count;
+    // Array of cached binomial coefficients. Only the lower half of
+    // size `(_grade + 2) / 2` is safed.
+    unsigned long* _bin_cof_buffer;
     // Array of the vertices with the size
     // `_dimension * _vertice_count * (_grade + 1)`
+    // All values for one dimesion are stored in consecutive positions.
+    // First all values of the x dimension are stored than all y ...
     // with `_vertice_count` subarrays of size each describing a point.
     double* _vertices;
 } bc_curve_t[1];

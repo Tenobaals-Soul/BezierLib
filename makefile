@@ -37,7 +37,7 @@ RELCFLAGS = -O3 -DNDEBUG -shared -PIC
 #
 # Linker and macro Settings
 #
-LFLAGS = 
+LFLAGS = GL glut m
 METAFLAGS = $(addprefix -I, $(INC_DIR)) $(addprefix -D, $(DEFINES)) $(addprefix -l, $(LFLAGS))
 
 .PHONY: all clean debug prep release remake
